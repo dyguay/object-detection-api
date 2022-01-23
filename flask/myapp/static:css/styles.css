@@ -1,0 +1,23 @@
+
+body {
+    background-color: #f4e1e6;
+    text-align: center;
+    font-size: 16px;
+}
+
+.navbar {
+    background-color: #333333;
+    font-size: large;
+}
+
+a {
+    color: #096ac5;
+}
+
+a:hover {
+    color: #096ac5;
+  }
+  
+.buttonHolder{ 
+    text-align: center;
+ }
