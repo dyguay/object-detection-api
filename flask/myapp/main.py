@@ -10,6 +10,7 @@ from myapp import myapp
 import time
 import uwsgi
 import git
+import subprocess
 
 #app = Flask(__name__)
 UPLOAD_FOLDER = 'myapp/static:css/uploads/'
@@ -53,7 +54,9 @@ def update():
         g = git.cmd.Git('/home/duyguay/object detection api')
         g.pull()
         time.sleep(5)
-        uwsgi.reload()
+        #uwsgi.reload()
+        print('hello')
+        subprocess.call(['sudo docker-compose.exe','restart'])
         return ''
 
 if __name__ == "__main__":
