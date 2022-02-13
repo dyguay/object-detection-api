@@ -7,7 +7,6 @@ services:
     container_name: flask
     environment:
       - APP_NAME=object-detection
-      - CAMERA_STREAM_URL= '/dev/video0'
     restart: always
     expose:
       - 8080

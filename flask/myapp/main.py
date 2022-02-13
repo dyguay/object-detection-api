@@ -2,31 +2,19 @@ from .ObjectDetector import detectImages, detectVideos
 import io
 from PIL import Image
 import os
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename #Pass it a filename and 
+# it will return a secure version of it.
+# This filename can then safely be stored on a regular file system
 
-from flask import render_template, request, Response, send_file, redirect
+from flask import render_template, request, Response, send_file
 from myapp import myapp
-
-import time
-import uwsgi
-import git
-import subprocess
 
 #app = Flask(__name__)
 UPLOAD_FOLDER = 'myapp/static:css/uploads/'
 
-# paste camera stream url in quotations ("url") or use 0 to use webcam 
-cam_url = os.getenv('CAMERA_STREAM_URL', '0')
-
 @myapp.route("/")
 def index():
     return render_template('index.html')
-
-@myapp.route('/live_stream', methods=["GET"])
-def live_stream():
-    """Video streaming route. Put this in the src attribute of an img tag."""
-    return Response(detectVideos(cam_url),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @myapp.route("/", methods=['POST'])
 def upload():
@@ -43,21 +31,7 @@ def upload():
         file.save(new_filename)
         return Response(detectVideos(str(new_filename)),
                 mimetype='multipart/x-mixed-replace; boundary=frame')
-    else:
-        return redirect(f"/live_stream")
-        #Response(detectVideos(cam_url),
-        #        mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@myapp.route("/update", methods = ["POST"])
-def update():
-    if request.method == 'POST':
-        g = git.cmd.Git('/home/duyguay/object detection api')
-        g.pull()
-        time.sleep(5)
-        #uwsgi.reload()
-        print('hello')
-        subprocess.call(['sudo docker-compose.exe','restart'])
-        return ''
 
 if __name__ == "__main__":
     myapp.run(debug=True)

@@ -1,4 +1,4 @@
-# Use the Python3.8.8 image
+# Use the Python3.7.8 image
 FROM python:3.7.8
 
 # Set the working directory to /myapp

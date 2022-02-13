@@ -25,14 +25,14 @@ class Detector:
         colors = np.random.uniform(0,255,size=(len(classNames),3))
 
     def detectObject(self, img):
-        cvNet.setInput(cv.dnn.blobFromImage(cv.resize(img, (300, 300)), 0.007843, (300, 300), 130))
-        detections = cvNet.forward()
-        cols = img.shape[1]
+        cvNet.setInput(cv.dnn.blobFromImage(cv.resize(img, (300, 300)), 0.007843, (300, 300), 130)) #input preparing
+        detections = cvNet.forward() #output
+        cols = img.shape[1] #input shapes
         rows = img.shape[0]
 
-        for i in range(detections.shape[2]):
+        for i in range(detections.shape[2]): # class output 
             confidence = detections[0, 0, i, 2]
-            if confidence > 0.3:
+            if confidence > 0.3: #threshold
                 class_id = int(detections[0, 0, i, 1])
 
                 xLeftBottom = int(detections[0, 0, i, 3] * cols)
@@ -40,8 +40,8 @@ class Detector:
                 xRightTop = int(detections[0, 0, i, 5] * cols)
                 yRightTop = int(detections[0, 0, i, 6] * rows)
 
-                cv.rectangle(img, (xLeftBottom, yLeftBottom), (xRightTop, yRightTop),colors[class_id], 7)
-                if class_id in range(len(classNames)):
+                cv.rectangle(img, (xLeftBottom, yLeftBottom), (xRightTop, yRightTop),colors[class_id], 7) 
+                if class_id in range(len(classNames)): #label settling
                     label = classNames[class_id] + ": " + str(confidence)
                     labelSize, _ = cv.getTextSize(label, cv.FONT_HERSHEY_SIMPLEX,1.5, 4)
                     yLeftBottom = max(yLeftBottom, labelSize[1])
@@ -54,7 +54,7 @@ detector = Detector()
 def detectImages(imName):
     img = cv.cvtColor(np.array(imName), cv.COLOR_BGR2RGB)
     f_img = detector.detectObject(img)
-    return cv.imencode('.jpg', f_img)[1].tobytes()
+    return cv.imencode('.jpg', f_img)[1].tobytes() #encode image
 
 def detectVideos(imName):
     cap = cv.VideoCapture(imName)
